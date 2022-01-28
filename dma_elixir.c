@@ -718,7 +718,6 @@ static int init_char_device(struct ip_core_dma * dma, const char * device_name)
     /* create character device */
     cdev_init(&dma->char_dev, &dma_fops);
     rc = cdev_add(&dma->char_dev, dma->devt, 1);
-
     if (rc < 0)
     {
         dev_err(dma->dt_device, "couldn't create character device\n");
@@ -928,6 +927,6 @@ static void __exit ip_core_dma_exit(void)
 module_init(ip_core_dma_init)
 module_exit(ip_core_dma_exit)
 
-MODULE_AUTHOR("Yustitskii Kirill");
-MODULE_DESCRIPTION("DMA elixir");
+MODULE_AUTHOR("Kirill Yustitskii <inst: yustitskii_kirill>");
+MODULE_DESCRIPTION("Driver for Xilinx AXI DMA");
 MODULE_LICENSE("GPL");
