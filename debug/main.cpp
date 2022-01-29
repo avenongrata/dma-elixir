@@ -95,7 +95,7 @@ int main(int argc, char ** argv)
     }
     else
     {
-        printf("Usage: ./region_read base_addr reg_count\n");
+        printf("Usage: ./prog_name base_addr reg_count\n");
         exit(2);
     }
 
