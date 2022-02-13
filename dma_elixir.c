@@ -564,7 +564,7 @@ void ip_core_cleanup(enum IP_CORE_CLEAN idx, struct ip_core_dma * dma)
     ipcore_debug("start");
     switch (idx)
     {
-    case IP_CORE_CHAN_DEL:;
+    case IP_CORE_CHAN_DEL:
         if (dma->dma_tx)
         {
             dma->dma_tx->dchan->device->
