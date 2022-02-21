@@ -1,0 +1,3 @@
+[submodule "argument-parser"]
+	path = argument-parser
+	url = https://github.com/avenongrata/argument-parser.git

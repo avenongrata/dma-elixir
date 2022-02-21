@@ -46,13 +46,6 @@ int write_flag = 0;
 
 //------------------------------------------------------------------------------
 
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wimplicit-function-declaration"
-#endif
-
-//------------------------------------------------------------------------------
-
 #define DRIVER_NAME         "dma_elixir"
 #define DRIVER_NAME_LEN     128
 #define DEVICE_COUNT        1
@@ -109,7 +102,7 @@ static void dma_clean(struct ip_core_dma * dma)
     dma->dma_rx        = NULL;
     dma->dt_device     = NULL;
     dma->dma_device    = NULL;
-    dma->devt          = 0x0U;
+    dma->devt          = 0x00U;
     ipcore_debug("end");
 }
 
@@ -123,7 +116,7 @@ static void chan_clean(struct ip_core_dchan * chan)
     chan->sg            = NULL;
     chan->pinned_pages  = NULL;
     chan->dma_direction = DMA_TRANS_NONE;
-    chan->timeout       = 0x0U;
+    chan->timeout       = 0x00U;
     ipcore_debug("end");
 }
 
@@ -219,7 +212,6 @@ static long wait_for_transfer(struct ip_core_dchan * chan)
         spin_unlock(&write_queue_lock);
     }
 
-    /* wake_up_interruptible(); */
     wake_up(&dma_write_wait);
 
     if (ret == 0)
@@ -397,6 +389,7 @@ long pin_pages(struct ip_core_dchan * chan, const char __user * buf,
         dev_err(dev, "Only pinned few user pages %d\n", pinned);
         /* for pin_user_pages need to use unpin_user_pages */
         dma_cleanup(UNPIN_PAGES, chan, pinned);
+
         return -ENOSYS;
     }
 
@@ -534,7 +527,6 @@ static unsigned int ip_core_dma_poll(struct file *filp, poll_table *wait)
     return mask;
 }
 
-
 //------------------------------------------------------------------------------
 
 static struct file_operations dma_fops =
@@ -564,7 +556,7 @@ void ip_core_cleanup(enum IP_CORE_CLEAN idx, struct ip_core_dma * dma)
     ipcore_debug("start");
     switch (idx)
     {
-    case IP_CORE_CHAN_DEL:;
+    case IP_CORE_CHAN_DEL:
         if (dma->dma_tx)
         {
             dma->dma_tx->dchan->device->
@@ -671,9 +663,10 @@ static char * create_device_name(struct ip_core_dma * dma)
 
     // delete memory
     kfree(tmp_device_name);
-    dev_dbg(dma->dt_device, "device name [%s]\n", device_name);
-    ipcore_debug("end");
 
+    dev_dbg(dma->dt_device, "device name [%s]\n", device_name);
+
+    ipcore_debug("end");
     return device_name;
 }
 
@@ -697,7 +690,6 @@ static int init_char_device(struct ip_core_dma * dma, const char * device_name)
                 MAJOR(dma->devt), MINOR(dma->devt));
     }
 
-
     /* create driver file */
     /* can I use "%s", device_name, wtf ?? */
     dma->dma_device = device_create(ip_core_dclass, NULL,
@@ -718,6 +710,7 @@ static int init_char_device(struct ip_core_dma * dma, const char * device_name)
     /* create character device */
     cdev_init(&dma->char_dev, &dma_fops);
     rc = cdev_add(&dma->char_dev, dma->devt, 1);
+
     if (rc < 0)
     {
         dev_err(dma->dt_device, "couldn't create character device\n");
@@ -775,7 +768,6 @@ static int init_dma_channels(struct ip_core_dma * dma)
     /* set timeout for DMA waiting function */
     dma->dma_tx->timeout = tx_timeout;
 
-
     //-------------------------------------------------------------------------
 
     /* RX channel */
@@ -827,7 +819,7 @@ static int ip_core_dma_probe(struct platform_device * pdev)
     //-------------------------------------------------------------------------
 
     /* initialize global variables */
-    write_flag = 0x0U;
+    write_flag = 0x00U;
     spin_lock_init(&write_queue_lock);
 
     //-------------------------------------------------------------------------
@@ -927,6 +919,6 @@ static void __exit ip_core_dma_exit(void)
 module_init(ip_core_dma_init)
 module_exit(ip_core_dma_exit)
 
-MODULE_AUTHOR("Kirill Yustitskii <inst: yustitskii_kirill>");
-MODULE_DESCRIPTION("Driver for Xilinx AXI DMA");
+MODULE_AUTHOR("Yustitskii Kirill");
+MODULE_DESCRIPTION("DMA elixir");
 MODULE_LICENSE("GPL");
