@@ -4,9 +4,10 @@ SUBDIRS += \
     api/dma_elixir_test \
     api/dma_elixir_udp_test \
     xilinx \
-    udp-echo-server \
+    api/udp-echo-server \
     argument-parser \
-    debug
+    debug \
+    debug/kernel
 
 api/dma_elixir_speed_test.file = \
     api/dma_elixir_speed_test/dma_elixir_speed_test.pro
@@ -20,14 +21,17 @@ api/dma_elixir_udp_test = \
 xilinx.file = \
     xilinx/xilinx_dma.pro
 
-udp-echo-server.file = \
-    udp-echo-server/udp_echo_server.pro
+api/udp-echo-server.file = \
+    api/udp-echo-server/udp_echo_server.pro
 
 argument-parser.file = \
     argument-parser/argument_parser.pro
 
 debug.file = \
     debug/dma_debug.pro
+
+debug/kernel.file = \
+    debug/kernel/mem_module.pro
 
 ARCH         = arm64
 SRC_PATH     = $$system(pwd)
