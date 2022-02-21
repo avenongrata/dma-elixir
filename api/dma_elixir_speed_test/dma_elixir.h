@@ -7,7 +7,7 @@
 #include <poll.h>
 #include <chrono>
 
-#define BUF_SIZE 2046
+#define BUF_SIZE 8192
 #define BUF_KEY 'k'
 #define ITERATION_COUNT 100000
 
@@ -43,13 +43,9 @@ int check_data(char *buf, int len, int key)
 int write_data(int fd)
 {
     struct pollfd fds;
-    char buf[BUF_SIZE];
+    //char buf[BUF_SIZE];
     int ret;
     int i;
-
-    /* fill the buffer */
-    for (i = 0; i < BUF_SIZE; i++)
-        buf[i] = i;
 
 //    for (i = 0; i < BUF_KEY; i++)
 //        std::cout << buf[i] << std::endl;
@@ -73,7 +69,15 @@ int write_data(int fd)
         {
             if (fds.revents & (POLLOUT | POLLWRBAND))
             {
+                char * buf = (char *) malloc(BUF_SIZE);
+
+                /* fill the buffer */
+                for (i = 0; i < BUF_SIZE; i++)
+                    buf[i] = i;
+
                 ret = write(fds.fd, buf, BUF_SIZE);
+
+                free(buf);
 //                if (ret != (BUF_SIZE))
 //                {
 //                    std::cout << "Writed less than needed\n";
@@ -92,74 +96,76 @@ int write_data(int fd)
 
 int read_data(int fd)
 {
-    char buf[BUF_SIZE];
+    //char buf[BUF_SIZE];
     int ret;
     struct pollfd fds;
 
     fds.fd = fd;
     fds.events = POLLIN;
 
-    while (1)
-    {
-        ret = poll(&fds, 1, -1);
-        if (ret < 0)
-        {
-            std::cout << "There is an error in poll function\n";
-        }
-        else if (ret == 0)
-        {
-            std::cout << "Timeout in poll function occurred\n";
-        }
-        else
-        {
-            if (fds.revents & POLLIN)
-            {
-                ret = read(fds.fd, buf, BUF_SIZE);
-                if (ret != BUF_SIZE)
-                {
-                    std::cout << "Read less than needed" << ret << std::endl;
-                    //global_rd_err++;
-                    //return -1;
-                }
+    char * buf = (char *) malloc(BUF_SIZE);
 
-                fds.revents = 0;
-            }
-        }
-    }
-
-//    for (int i = 0; i < ITERATION_COUNT; i++)
+//    while (1)
 //    {
+//        ret = poll(&fds, 1, -1);
+//        if (ret < 0)
+//        {
+//            std::cout << "There is an error in poll function\n";
+//        }
+//        else if (ret == 0)
+//        {
+//            std::cout << "Timeout in poll function occurred\n";
+//        }
+//        else
+//        {
+//            if (fds.revents & POLLIN)
+//            {
+//                ret = read(fds.fd, buf, BUF_SIZE);
+//                if (ret != BUF_SIZE)
+//                {
+//                    std::cout << "Read less than needed" << ret << std::endl;
+//                    //global_rd_err++;
+//                    //return -1;
+//                }
 
-//        /* start timer */
-//        auto t1 = high_resolution_clock::now();
-//        ret = read(fd, buf, BUF_SIZE);
-//        /* end timer */
-//        auto t2 = high_resolution_clock::now();
-
-//        /* count time */
-//        duration<double, std::milli> ms_double = t2 - t1;
-//        compl_time += ms_double.count();
-
-////        if (ret != BUF_SIZE)
-////        {
-////            std::cout << "Returned less than needed\n";
-////            global_rd_err++;
-////            continue;
-////            //return -1;
-////            //return -1;
-////        }
-////        /* check data for correctness */
-////        ret = check_data(buf, ret, i);
-////        if (ret)
-////            global_rd_err++;
+//                fds.revents = 0;
+//            }
+//        }
 //    }
 
-//    double it_count = ITERATION_COUNT * BUF_SIZE;
-//    double m_bits =  it_count / 125000;
+    for (int i = 0; i < ITERATION_COUNT; i++)
+    {
 
-//    std::cout << "Speed: " << m_bits << "/"
-//              << compl_time / 1000 << std::endl
-//              << m_bits / (compl_time / 1000) << " Mbits/sec\n";
+        /* start timer */
+        auto t1 = high_resolution_clock::now();
+        ret = read(fd, buf, BUF_SIZE);
+        /* end timer */
+        auto t2 = high_resolution_clock::now();
+
+        /* count time */
+        duration<double, std::milli> ms_double = t2 - t1;
+        compl_time += ms_double.count();
+
+        if (ret != BUF_SIZE)
+        {
+            std::cout << "Returned less than needed\n";
+            global_rd_err++;
+            continue;
+            //return -1;
+            //return -1;
+        }
+        /* check data for correctness */
+        ret = check_data(buf, ret, i);
+        if (ret)
+            global_rd_err++;
+    }
+
+    double it_count = ITERATION_COUNT * BUF_SIZE;
+    double m_bits =  it_count / 125000;
+
+    std::cout << "Speed: " << m_bits << "/"
+              << compl_time / 1000 << std::endl
+              << m_bits / (compl_time / 1000) << " Mbits/sec\n";
 
     return global_rd_err;
 }

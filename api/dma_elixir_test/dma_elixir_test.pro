@@ -1,10 +1,10 @@
-TEMPLATE = app
-CONFIG += console c++11
-CONFIG -= app_bundle
-CONFIG -= qt
+QMAKE_CFLAGS += -std=c99
 
 SOURCES += \
-        main.cpp
+    elixir_test.c
+
+DISTFILES += \
+    Makefile
 
 HEADERS += \
-    dma_elixir.h
+    elixir_test.h

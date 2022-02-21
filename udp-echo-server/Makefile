@@ -31,7 +31,7 @@ SDK_MAKE    = $(SDK_GCC) $(CFLAGS) $(INCPATH)
 
 #======================================================================
 
-TARGET = elixir_test
+TARGET = udp_echo_server
 
 OBJECTS_DIR = ./objects
 
@@ -40,8 +40,6 @@ OBJECTS =
 #======================================================================
 
 first: all
-
-remake: distclean all
 
 all: $(OBJECTS) $(TARGET)
 
@@ -54,8 +52,7 @@ distclean:
 #======================================================================
 
 $(TARGET):
-	$(SDK_GCC) $(CFLAGS) -o $(TARGET) elixir_test.c
+	$(SDK_GCC) $(CFLAGS) -o $(TARGET) udp_echo_server.c
 
 #======================================================================
-
 
