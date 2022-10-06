@@ -14,14 +14,6 @@ int dma_write(int fd)
     char write_buf[BUF_LEN];
     int ret;
     
-    /* map physical coherent memory to user space */
-//     write_buf = mmap(NULL, BUF_LEN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-//     if (write_buf == MAP_FAILED)
-//     {
-//         printf("Can't map memory\n");
-//         exit(0);
-//     }
-    
     /* fill the buffer */
     for (i = 0; i < BUF_LEN; i++)
         write_buf[i] = 16;
@@ -35,14 +27,7 @@ int dma_write(int fd)
         printf("Returned less than needed - %d/%d\n", ret, BUF_LEN);
         exit(0);
     }
-    
-//     /* delete the mappings */
-//     if (munmap(write_buf, BUF_LEN) < 0)
-//     {
-//         printf("Can't delete the mappings\n");
-//         exit(0);
-//     }
-//     
+     
     return 0;    
 }
 
@@ -60,12 +45,7 @@ int dma_read(int fd)
         printf("arr[%d] = %d\n", i, arr[i]);
     
     ret = read(fd, arr, BUF_LEN);
-//     if (ret != BUF_LEN)
-//     {
-//         printf("Returned less than needed - %d/%d\n", ret, BUF_LEN);
-//         exit(0);
-//     }
-    
+
     for (i = 0; i < BUF_LEN; i++)
     {
         if (arr[i] != 16)
