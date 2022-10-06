@@ -98,15 +98,7 @@ int main(int argc, char **  argv)
                    ret);
             exit(EXIT_FAILURE);
         }
-
-        /* check for correctness */
-//        ret = check(recv_buf);
-//        if (ret < 0)
-//        {
-//            perror("received incorrect packet from UDP\n");
-//            exit(EXIT_FAILURE);
-//        }
-
+        
         pkg_recv++;
 
         /*-------------------------------------------------------------------*/
