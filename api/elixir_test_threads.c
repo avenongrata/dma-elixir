@@ -152,7 +152,3 @@ void * _write_thread(void * vargp)
     }
 
 }
-
-
-
-
