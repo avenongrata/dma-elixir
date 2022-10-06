@@ -46,10 +46,3 @@ OTHER_FILES += Makefile
 INCLUDEPATH += $$system(find -L $$SRC_PATH -type d)
 INCLUDEPATH += $$system(find -L $$HEADERS_PATH/include -type d)
 INCLUDEPATH += $$system(find -L $$HEADERS_PATH/arch/$$ARCH/include -type d)
-
-#------------------------------------------------------------------------------
-#INCLUDEPATH += \
-#    /opt/radiomodule-sdk/arm-buildroot-linux-musleabihf/include \
-#    /opt/radiomodule-sdk/arm-buildroot-linux-musleabihf/sysroot/usr/include \
-#    /opt/radiomodule-sdk/src/linux/arch/arm/include \
-#    /opt/radiomodule-sdk/src/linux/include
