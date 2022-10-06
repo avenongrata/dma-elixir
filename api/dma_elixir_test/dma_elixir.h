@@ -35,12 +35,7 @@ int check_data(char *buf, int len, int key)
             printf("## index %d, invalid value - %d\n", i, buf[i]);
             //return 1;
         }
-//        else
-//        {
-//            printf("index %d, valid value - %d\n", i, buf[i]);
-//        }
 
-    //std::cout << "Dma complete\n";
     return 0;
 }
 
@@ -56,11 +51,7 @@ int write_data(int fd)
     for (i = 0; i < BUF_SIZE; i++)
     {
         buf[i] = (char)i;
-        //printf("buf[%d] = %d\n", i, buf[i]);
     }
-
-//    for (i = 0; i < BUF_KEY; i++)
-//        std::cout << buf[i] << std::endl;
 
     /* check for write-function */
     fds.fd = fd;
@@ -85,12 +76,10 @@ int write_data(int fd)
                 if (ret != BUF_SIZE)
                 {
                     std::cout << "Writed less than needed\n";
-                    //global_rd_err++;
                     return -1;
                 }
 
                 fds.revents = 0;
-                //sleep(1);
             }
         }
     }
@@ -103,37 +92,6 @@ int read_data(int fd)
     char buf[BUF_SIZE];
     int ret;
     struct pollfd fds;
-
-//    fds.fd = fd;
-//    fds.events = POLLIN;
-
-//    while (1)
-//    {
-//        ret = poll(&fds, 1, -1);
-//        if (ret < 0)
-//        {
-//            std::cout << "There is an error in poll function\n";
-//        }
-//        else if (ret == 0)
-//        {
-//            std::cout << "Timeout in poll function occurred\n";
-//        }
-//        else
-//        {
-//            if (fds.revents & POLLIN)
-//            {
-//                ret = read(fds.fd, buf, BUF_SIZE);
-//                if (ret != BUF_SIZE)
-//                {
-//                    std::cout << "Read less than needed" << ret << std::endl;
-//                    //global_rd_err++;
-//                    //return -1;
-//                }
-
-//                fds.revents = 0;
-//            }
-//        }
-//    }
 
     for (int i = 0; i < ITERATION_COUNT; i++)
     {
@@ -153,7 +111,6 @@ int read_data(int fd)
             std::cout << "Returned less than needed\n";
             global_rd_err++;
             continue;
-            //return -1;
         }
         /* check data for correctness */
         ret = check_data(buf, ret, i);
@@ -174,16 +131,6 @@ int read_data(int fd)
 
 int transfer(void)
 {
-    /* start timer */
-
-    /* start read-thread */
-
-    /* write to the file */
-
-    /* wait for read-thread */
-
-    /* stop timer */
-
     return 0;
 }
 
@@ -221,5 +168,3 @@ int create_test_file()
     return 0;
 
 }
-
-
