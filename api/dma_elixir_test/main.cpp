@@ -10,8 +10,6 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
-//    create_test_file();
-//    exit(0);
     std::string file_name = "/dev/dma_elixir_o_v1";
     int fd;
     int ret;
@@ -52,8 +50,6 @@ int main(int argc, char ** argv)
         std::cout << "There is no such action\n";
         exit(EXIT_FAILURE);
     }
-
-    /* count time */
 
     return 0;
 }
